@@ -11,7 +11,9 @@
 from __future__ import annotations
 
 import json
+import re
 import urllib.request
+from urllib.parse import unquote, urlsplit
 from html import escape
 from datetime import date
 import shlex
@@ -216,6 +218,42 @@ code {{ word-break: break-all; }} .meta {{ color: #718096; }}
 """
     (ROOT / "caddy" / "models.html").write_text(generated, encoding="utf-8")
     ctx.print(f"Generated caddy/models.html with {len(models)} models")
+
+
+_MARKDOWN_IMAGE = re.compile(r"!\[[^\]]*\]\(\s*<?([^\s)>]+)>?")
+
+
+def _referenced_local_images() -> list[Path]:
+    """Return existing repository files referenced as Markdown images."""
+    images: set[Path] = set()
+    for reference in _MARKDOWN_IMAGE.findall(SLIDES.read_text(encoding="utf-8")):
+        parsed = urlsplit(reference)
+        if parsed.scheme or parsed.netloc:
+            continue
+
+        path = (ROOT / SLIDES.parent / unquote(parsed.path)).resolve()
+        try:
+            relative_path = path.relative_to(ROOT)
+        except ValueError:
+            continue
+        if path.is_file():
+            images.add(relative_path)
+
+    return sorted(images)
+
+
+@task()
+def stage_images(ctx: Context) -> None:
+    """Stage local images referenced by slides.qmd."""
+    images = _referenced_local_images()
+    if not images:
+        ctx.print("No local slide images found")
+        return
+
+    command = ["git", "add", "--", *(str(path) for path in images)]
+    with ctx.cd(ROOT):
+        ctx.run(shlex.join(command))
+    ctx.print(f"Staged {len(images)} slide image(s)")
 
 
 script()
