@@ -1,0 +1,146 @@
+name: pycon-2026-teaching-spreadsheets-python
+
+services:
+  caddy:
+    image: caddy:2.8-alpine
+    ports:
+      - "127.0.0.1:8000:80"
+    volumes:
+      - ./caddy:/srv:ro
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --spider
+        - http://127.0.0.1:80
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  grist:
+    image: gristlabs/grist-oss:1.7.19
+    environment:
+      GRIST_DEFAULT_EMAIL: you@example.com
+      GRIST_SESSION_SECRET: local-development-only-change-me
+      GRIST_SINGLE_ORG: pycon-workshop
+      # Setup
+      GRIST_ENABLE_SERVICE_ACCOUNTS: true
+      GRIST_IN_SERVICE: true
+      # GRIST_BOOT_KEY: d540e2f84-fac0-497a-b2d7-85371b5255d0
+
+    ports:
+      - "127.0.0.1:8484:8484"
+    volumes:
+      - grist-data:/persist
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8484', {redirect: 'manual'}).then(response => process.exit(response.status < 400 ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  marimo:
+    image: ghcr.io/marimo-team/marimo:latest-sql
+    command:
+      - marimo
+      - edit
+      - --no-token
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8080"
+      - /workspace
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/health').read()"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    command:
+      - gateway
+      - run
+    environment:
+      OPENROUTER_API_KEY: ${OR_API_KEY:?Load OR_API_KEY with direnv before starting Compose}
+      API_SERVER_ENABLED: "true"
+      API_SERVER_HOST: 0.0.0.0
+      API_SERVER_PORT: "8642"
+      API_SERVER_KEY: local-development-only-api-key
+    volumes:
+      - hermes-data:/opt/data
+      - hermes-agent-src:/opt/hermes
+    working_dir: /workspace
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import urllib.request; request = urllib.request.Request('http://127.0.0.1:8642/health', headers={'Authorization': 'Bearer local-development-only-api-key'}); urllib.request.urlopen(request).read()"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  webui:
+    image: ghcr.io/nesquena/hermes-webui:latest
+    environment:
+      OPENROUTER_API_KEY: ${OR_API_KEY:?Load OR_API_KEY with direnv before starting Compose}
+      HERMES_HOME: /home/hermeswebui/.hermes
+      HERMES_API_URL: http://hermes:8642
+      HERMES_WEBUI_GATEWAY_BASE_URL: http://hermes:8642
+      HERMES_WEBUI_GATEWAY_API_KEY: local-development-only-api-key
+      HERMES_WEBUI_HOST: 0.0.0.0
+      HERMES_WEBUI_PORT: "8787"
+      HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+      HERMES_WEBUI_DEFAULT_WORKSPACE: /workspace
+      HERMES_WEBUI_SERVER_CWD: /workspace
+      # HERMES_WEBUI_PASSWORD is intentionally unset for this local demo.
+    ports:
+      - "127.0.0.1:4096:8787"
+    volumes:
+      - hermes-data:/home/hermeswebui/.hermes
+      - hermes-agent-src:/home/hermeswebui/.hermes/hermes-agent:ro
+      - .:/workspace
+    working_dir: /workspace
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/health').read()"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    restart: unless-stopped
+  devcontainer:
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+    command: sleep infinity
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+
+volumes:
+  grist-data:
+  hermes-data:
+  hermes-agent-src:
