@@ -28,10 +28,12 @@ ROOT = Path(__file__).resolve().parent
 SLIDES = ROOT / "slides.qmd"
 SLIDES = SLIDES.relative_to(ROOT)
 
+
 @task()
 def _quarto_installed(ctx: Context):
     if not shutil.which("quarto"):
         ctx.rich_exit("quarto not found in [red]$PATH[/]")
+
 
 @task(aliases=["p"], pre=[_quarto_installed])
 def preview(
@@ -41,11 +43,10 @@ def preview(
     no_browser: Annotated[bool, "Do not open the preview in a browser"] = False,
 ) -> None:
     """Render and serve the Reveal.js deck with live reload."""
-    command = \
-        f"""
+    command = f"""
         quarto preview {SLIDES} --render revealjs --host {host} \
-        {f'--port {port}' if port else ''} \
-        {'--no-browser' if no_browser else ''}
+        {f"--port {port}" if port else ""} \
+        {"--no-browser" if no_browser else ""}
         """
     with ctx.cd(ROOT):
         ctx.run(command, pty=True)
@@ -121,7 +122,9 @@ def setup_hermes(
 ) -> None:
     """Configure Hermes from OR_API_KEY and restart the Compose services."""
     if not os.environ.get("OR_API_KEY"):
-        ctx.rich_exit("Load OR_API_KEY with direnv before running this task.", exit_code=1)
+        ctx.rich_exit(
+            "Load OR_API_KEY with direnv before running this task.", exit_code=1
+        )
     if not model:
         ctx.rich_exit("A model ID is required.", exit_code=1)
 
@@ -167,7 +170,9 @@ def update_models(ctx: Context) -> None:
     """Fetch free OpenRouter models and generate the Caddy model catalog page."""
     api_key = os.environ.get("OR_API_KEY")
     if not api_key:
-        ctx.rich_exit("Load OR_API_KEY with direnv before running this task.", exit_code=1)
+        ctx.rich_exit(
+            "Load OR_API_KEY with direnv before running this task.", exit_code=1
+        )
 
     request = urllib.request.Request(
         "https://openrouter.ai/api/v1/models",
@@ -211,7 +216,6 @@ code {{ word-break: break-all; }} .meta {{ color: #718096; }}
 """
     (ROOT / "caddy" / "models.html").write_text(generated, encoding="utf-8")
     ctx.print(f"Generated caddy/models.html with {len(models)} models")
-
 
 
 script()

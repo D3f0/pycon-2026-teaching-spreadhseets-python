@@ -61,9 +61,17 @@ execute:
 
 ---
 
-# Some history
+# Should I attend this workshop?
 
-12 years ago
+---
+
+::: {.incremental}
+- If you want to have full control over your the data in your spreadsheets
+- If you want have structure and tighter control over your speadsheets
+- If you want to personalize how you interact with your data in a Pythonic way
+- If you want to create hyper personalized applications arround spreadsheets
+  with AI.
+:::
 
 ---
 
@@ -88,11 +96,11 @@ execute:
 Working in Grist is organized in this way:
 
 ::: {.incremental}
-- A site (each user has his/hers)
+- {{< fa globe >}} A site (each user has his/hers)
 - {{< fa folder-open >}} A workspace, this is like folders and contain documents
-- Documents
-  - Database
-  - Pages, views and other presentation data
+- {{< fa file-lines >}} Documents
+  - {{< fa database >}} Database
+  - {{< fa table-columns >}} Pages, views and other presentation data
 
 :::
 
@@ -125,6 +133,35 @@ Working in Grist is organized in this way:
 
 
 
-# API Access
+# Accessing your data over the API
 
-Marimo comes with a console
+---
+
+## API Console
+
+In Grist settings we can jump in directly into the API Console.
+
+---
+
+## What about a notebook?
+
+---
+
+---
+
+---
+
+
+# Using AI
+
+---
+
+---
+
+---
+
+# Closing words
+
+::: {.incremental}
+- The level of control
+:::
