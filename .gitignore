@@ -1,0 +1,12 @@
+.DS_Store
+.quarto/
+_site/
+.jupyter_cache/
+slides_files/
+*.quarto_ipynb
+
+/.quarto/
+**/*.quarto_ipynb
+.envrc
+.envrc.local
+hermes/

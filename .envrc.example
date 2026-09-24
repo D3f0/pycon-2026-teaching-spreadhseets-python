@@ -1,0 +1,4 @@
+# Copy this file to .envrc, replace the placeholder, then run:
+#   direnv allow
+# Keep .envrc local; never commit provider keys.
+export OR_API_KEY="replace-with-your-openrouter-api-key"
