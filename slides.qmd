@@ -1,0 +1,130 @@
+---
+title: "Teaching Some Python to Your Spreadsheets"
+subtitle: "Grist, Python, SQLite, APIs, and safer agents"
+author: "Nahuel Defossé"
+format:
+  revealjs:
+    toc: false
+    slide-number: true
+    transition: slide
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: a11y
+    theme:
+      - solarized
+      - custom.scss
+    footer: "Teaching Some Python to Your Spreadsheets"
+execute:
+  enabled: false
+---
+
+## Welcome {.center}
+
+<!-- Add the event, date, and a one-sentence promise for the workshop. -->
+
+---
+
+## About me {.about-me}
+
+::: {.columns}
+
+::: {.column width="60%"}
+
+::: {.incremental}
+- 🐍 Pythonista with 18 years of experience 🇦🇷 🧉
+  - Co-organized SciPy Latin America
+  - PyCon Argentina and EuroPython speaker
+- 🚜 Former CTO at [Hello Tractor](https://hellotractor.com/)
+- 🧪 Software Engineer at IBM Research
+- 🛰️ Worked on [foundational models for geospatial applications](https://www.earthdata.nasa.gov/news/nasa-ibm-openly-release-geospatial-ai-foundation-model-nasa-earth-observation-data)
+- 💬 Worked on [Flowpilot](https://research.ibm.com/projects/flowpilot), providing core features to different products and divisions
+- 💬 Currently working on [Datascape], a data harness for insight generation for enterprise data scale.
+:::
+
+:::
+
+::: {.column width="40%"}
+
+![](img/Teaching%20your%20spreadsheets%20sone%20pytho%202.png){fig-alt="A cartoon Python writing a spreadsheet formula with a fountain pen"}
+
+:::
+
+:::
+
+---
+
+## Follow along
+
+<!-- Add links and QR codes for the slides, repository, and workshop materials. -->
+
+
+
+---
+
+# Some history
+
+12 years ago
+
+---
+
+# Grist
+
+---
+
+## A spreadsheet or a database
+
+::: {.incremental}
+- Grist is an Open Source (and Self Hostable) spreadsheet
+  that uses Python **data types** for columns. The SaaS version of it lives in [https://getgrist.com](https://getgirst.com)
+- It stores everything as a SQLite database that is easy to share.
+- And when we put a `=` we can start typing python
+- Row and column formatting or styling can be wirtten asso with Python
+- Has some
+:::
+
+
+## Structure
+
+Working in Grist is organized in this way:
+
+::: {.incremental}
+- A site (each user has his/hers)
+- {{< fa folder-open >}} A workspace, this is like folders and contain documents
+- Documents
+  - Database
+  - Pages, views and other presentation data
+
+:::
+
+## A grist Spreadsheets
+
+![Main Spreadsheets View](./img/main-grist-screen.png)
+
+---
+## Column types
+
+::: {.columns}
+::: {.column}
+![](./img/column.png)
+:::
+::: {.column}
+![](./img/type.png)
+:::
+:::
+
+## Trying out dates
+
+::: {.columns}
+::: {.column}
+![](./img/selection-of-date-type.png)
+:::
+::: {.column}
+![](./img/date-picker.png)
+:::
+:::
+
+
+
+# API Access
+
+Marimo comes with a console
