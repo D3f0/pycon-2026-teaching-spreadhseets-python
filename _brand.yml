@@ -1,0 +1,17 @@
+color:
+  palette:
+    ink: "#263238"
+    paper: "#fdf6e3"
+    python-blue: "#3776ab"
+    python-yellow: "#ffd343"
+  foreground: ink
+  background: paper
+  primary: python-blue
+  secondary: python-yellow
+
+typography:
+  base:
+    family: Source Sans Pro
+  headings:
+    family: Source Sans Pro
+    weight: 700
