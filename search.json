@@ -1,0 +1,107 @@
+[
+  {
+    "objectID": "slides.html#welcome",
+    "href": "slides.html#welcome",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Welcome",
+    "text": "Welcome"
+  },
+  {
+    "objectID": "slides.html#about-me",
+    "href": "slides.html#about-me",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "About me",
+    "text": "About me\n\n\n\n🐍 Pythonista with 18 years of experience 🇦🇷 🧉\n\nCo-organized SciPy Latin America\nPyCon Argentina and EuroPython speaker\n\n🚜 Former CTO at Hello Tractor\n🧪 Software Engineer at IBM Research Software Innovation Lab\n🛰️ Worked on foundational models for geospatial applications\n💬 Worked on Flowpilot, providing core features to different products and divisions\n💬 Currently working on [Datascape], a data harness for insight generation, enterprise data scale."
+  },
+  {
+    "objectID": "slides.html#follow-along",
+    "href": "slides.html#follow-along",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Follow along",
+    "text": "Follow along"
+  },
+  {
+    "objectID": "slides.html#a-spreadsheet-or-a-database",
+    "href": "slides.html#a-spreadsheet-or-a-database",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "A spreadsheet or a database",
+    "text": "A spreadsheet or a database\n\nGrist is an Open Source (and Self Hostable) spreadsheet that uses Python data types for columns. The SaaS version of it lives in https://getgrist.com\nIt stores everything as a SQLite database that is easy to share.\nAnd when we put a = we can start typing python\nRow and column formatting or styling can be wirtten asso with Python\nHas some"
+  },
+  {
+    "objectID": "slides.html#grist-architecture",
+    "href": "slides.html#grist-architecture",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Grist Architecture",
+    "text": "Grist Architecture\n\n\n\n\n\n%%{init: {\n  \"theme\": \"base\",\n  \"flowchart\": {\"curve\": \"linear\", \"htmlLabels\": true, \"nodeSpacing\": 40, \"rankSpacing\": 40, \"diagramPadding\": 6},\n  \"themeVariables\": {\n    \"background\": \"#fdf6e3\",\n    \"primaryColor\": \"#e4f1f8\",\n    \"primaryTextColor\": \"#263238\",\n    \"primaryBorderColor\": \"#24557a\",\n    \"lineColor\": \"#607d8b\",\n    \"clusterBkg\": \"#f8f1df\",\n    \"clusterBorder\": \"#9aadaf\",\n    \"fontFamily\": \"system-ui, sans-serif\",\n    \"fontSize\": \"25px\"\n  }\n}}%%\nflowchart TB\n    UI[\"Spreadsheet UI\"] --&gt; Engine[\"Document engine&lt;br/&gt;(Node.js)\"]\n    Engine &lt;--&gt; DB[(\"SQLite\")]\n    Engine --&gt; Sandbox[\"Sandboxed Python\"] --&gt; Formulas[\"Formulas\"]\n    Formulas --&gt; Engine\n    Engine &lt;--&gt; API[\"Grist REST API\"]\n\n    API &lt;--&gt; Notebook[\"Python notebook\"]\n    API &lt;--&gt; Gry[\"gry CLI\"]\n    API &lt;-.-&gt; MCP[\"With MCP\"]\n\n\n    classDef ui fill:#e4f1f8,stroke:#24557a,color:#263238,stroke-width:2px,font-size:25px;\n    classDef python fill:#fff0c9,stroke:#8b4b00,color:#263238,stroke-width:2px,font-size:25px;\n    classDef data fill:#edf3df,stroke:#5f6f36,color:#263238,stroke-width:2px,font-size:25px;\n    classDef client fill:#dfeecf,stroke:#5f6f36,color:#263238,stroke-width:2px,font-size:25px;\n    classDef mcp fill:#fdf6e3,stroke:#5f6f36,color:#263238,stroke-width:2px,stroke-dasharray:6 4,font-size:25px;\n    class UI,Engine,API ui;\n    class Sandbox,Formulas python;\n    class Notebook,Gry client;\n    class DB data;\n    class MCP mcp;\n    linkStyle default stroke:#607d8b,stroke-width:2px;"
+  },
+  {
+    "objectID": "slides.html#workshop-services",
+    "href": "slides.html#workshop-services",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Workshop services",
+    "text": "Workshop services\n\n\n\n\n\n%%{init: {\n  \"theme\": \"base\",\n  \"flowchart\": {\"curve\": \"linear\", \"htmlLabels\": true, \"nodeSpacing\": 34, \"rankSpacing\": 42, \"diagramPadding\": 4},\n  \"themeVariables\": {\n    \"background\": \"#fdf6e3\",\n    \"primaryTextColor\": \"#17324d\",\n    \"lineColor\": \"#6b7c83\",\n    \"fontFamily\": \"system-ui, sans-serif\",\n    \"fontSize\": \"21px\"\n  }\n}}%%\nflowchart TB\n    Caddy[\"Caddy&lt;br/&gt;&lt;b&gt;localhost:8000 → :80&lt;/b&gt;\"]\n    Grist[\"Grist&lt;br/&gt;&lt;b&gt;localhost:8484 → :8484&lt;/b&gt;\"]\n    Marimo[\"Marimo&lt;br/&gt;&lt;b&gt;localhost:8081 → :8080&lt;/b&gt;\"]\n    WebUI[\"Hermes WebUI&lt;br/&gt;&lt;b&gt;localhost:4096 → :8787&lt;/b&gt;\"]\n    Hermes[\"Hermes&lt;br/&gt;&lt;b&gt;:8642 internal&lt;/b&gt;\"]\n\n    WebUI --&gt;|\"HTTP API\"| Hermes\n\n    CaddyFiles[\"&lt;b&gt;Caddy files · read-only&lt;/b&gt;&lt;br/&gt;./caddy → /srv&lt;br/&gt;Caddyfile → /etc/caddy/Caddyfile\"]\n    Workspace[\"&lt;b&gt;Workspace bind&lt;/b&gt;&lt;br/&gt;. → /workspace\"]\n    GristData[(\"&lt;b&gt;grist-data&lt;/b&gt;&lt;br/&gt;Grist: /persist\")]\n    HermesData[(\"&lt;b&gt;hermes-data&lt;/b&gt;&lt;br/&gt;Hermes: /opt/data&lt;br/&gt;WebUI: ~/.hermes\")]\n    HermesSource[(\"&lt;b&gt;hermes-agent-src&lt;/b&gt;&lt;br/&gt;Hermes: /opt/hermes&lt;br/&gt;WebUI: ~/.hermes/hermes-agent · RO\")]\n\n    Caddy --- CaddyFiles\n    Grist --- GristData\n    Marimo --- Workspace\n    WebUI --- Workspace\n    WebUI --- HermesData\n    Hermes --- HermesData\n    WebUI --- HermesSource\n    Hermes --- HermesSource\n\n    classDef service fill:#d9eef7,stroke:#1f5d78,color:#17324d,stroke-width:2.5px;\n    classDef agent fill:#e2def5,stroke:#5b4b8a,color:#2f2850,stroke-width:2.5px;\n    classDef bind fill:#ffe6ad,stroke:#a85d00,color:#4d3300,stroke-width:2.5px;\n    classDef volume fill:#dcecc5,stroke:#55752b,color:#294214,stroke-width:2.5px;\n    class Caddy,Grist,Marimo service;\n    class Hermes,WebUI agent;\n    class CaddyFiles,Workspace bind;\n    class GristData,HermesData,HermesSource volume;\n    linkStyle default stroke:#6b7c83,stroke-width:2.5px;\n    linkStyle 0 stroke:#5b4b8a,stroke-width:3px;"
+  },
+  {
+    "objectID": "slides.html#ui-structure",
+    "href": "slides.html#ui-structure",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "UI Structure",
+    "text": "UI Structure\nWorking in Grist is organized in this way:\n\n A site (each user has his/hers)\n A workspace, this is like folders and contain documents\n Documents\n\n Database\n Pages, views and other presentation data"
+  },
+  {
+    "objectID": "slides.html#a-grist-spreadsheets",
+    "href": "slides.html#a-grist-spreadsheets",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "A grist Spreadsheets",
+    "text": "A grist Spreadsheets\n\nMain Spreadsheets View"
+  },
+  {
+    "objectID": "slides.html#column-types",
+    "href": "slides.html#column-types",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Column types",
+    "text": "Column types"
+  },
+  {
+    "objectID": "slides.html#trying-out-dates",
+    "href": "slides.html#trying-out-dates",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Trying out dates",
+    "text": "Trying out dates"
+  },
+  {
+    "objectID": "slides.html#getting-the-accounts-api-key",
+    "href": "slides.html#getting-the-accounts-api-key",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Getting the account’s API key",
+    "text": "Getting the account’s API key\nIn Grist settings we can jump in directly into the API Console."
+  },
+  {
+    "objectID": "slides.html#the-gry-cli",
+    "href": "slides.html#the-gry-cli",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "The gry CLI",
+    "text": "The gry CLI"
+  },
+  {
+    "objectID": "slides.html#what-about-a-notebook",
+    "href": "slides.html#what-about-a-notebook",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "What about a notebook?",
+    "text": "What about a notebook?"
+  },
+  {
+    "objectID": "slides.html#connecting-through-mcp",
+    "href": "slides.html#connecting-through-mcp",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Connecting through MCP",
+    "text": "Connecting through MCP"
+  },
+  {
+    "objectID": "slides.html#using-hermes",
+    "href": "slides.html#using-hermes",
+    "title": "Teaching Some Python to Your Spreadsheets",
+    "section": "Using Hermes",
+    "text": "Using Hermes"
+  }
+]
